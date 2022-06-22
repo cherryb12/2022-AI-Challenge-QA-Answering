@@ -131,21 +131,19 @@ def preprocess_validation_example(example):
 
 
 def main(config):
-
+    
     datapath = config.data_path
     savepath = config.save_path
 
     # read data files
     if os.path.isdir(datapath): 
         file_list = os.listdir(datapath) 
-    print(f"{len(file_list)} files found : ", file_list)
 
     for i, file in enumerate(file_list):
         if file.endswith(".json"):
             file_list[i] = pd.read_json(os.path.join(datapath, file))
         else:
             file_list[i] = pd.read_csv(os.path.join(datapath, file))
-        print(f"file {i} : ", file_list[i].shape[0])
 
     # read train json file into dataframe
     cols = ['context', 'question_id', 'question', 'answer_start', 'text']
