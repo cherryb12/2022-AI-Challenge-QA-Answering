@@ -141,9 +141,9 @@ def main(config):
 
     for i, file in enumerate(file_list):
         if file.endswith(".json"):
-            file_list[i] = pd.read_json(os.path.join(datapath, file))
+            file = pd.read_json(os.path.join(datapath, file))
         else:
-            file_list[i] = pd.read_csv(os.path.join(datapath, file))
+            file = pd.read_csv(os.path.join(datapath, file))
 
     # read train json file into dataframe
     cols = ['context', 'question_id', 'question', 'answer_start', 'text']
