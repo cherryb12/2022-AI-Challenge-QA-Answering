@@ -136,15 +136,15 @@ def main(config):
     savepath = config.save_path
 
     # read data files
-    if os.path.isdir(datapath):  # 경로가 존재하는 지 확인
-        file_list = os.listdir(datapath)  #  해당 경로의 모든 파일 리스트
+    if os.path.isdir(datapath): 
+        file_list = os.listdir(datapath) 
     print(f"{len(file_list)} files found : ", file_list)
 
     for i, file in enumerate(file_list):
         if file.endswith(".json"):
             file_list[i] = pd.read_json(os.path.join(datapath, file))
         else:
-            file_list[i] = pd.read_csv(os.path.join(path, file))
+            file_list[i] = pd.read_csv(os.path.join(datapath, file))
         print(f"file {i} : ", file_list[i].shape[0])
 
     # read train json file into dataframe
