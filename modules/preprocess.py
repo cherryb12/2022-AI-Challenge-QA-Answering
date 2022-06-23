@@ -42,6 +42,7 @@ def define_argparser():
 
 # preprocess_training_example function
 def preprocess_training_examples(examples):
+    tokenizer = AutoTokenizer.from_pretrained(config.pretrained_model_name)
     inputs = tokenizer(
         examples["question"].tolist(),
         examples["context"].tolist(),
@@ -104,6 +105,7 @@ def preprocess_training_examples(examples):
 
 # preprocess_validation_example function
 def preprocess_validation_examples(examples):
+    tokenizer = AutoTokenizer.from_pretrained(config.pretrained_model_name)
     inputs = tokenizer(
         examples["question"].tolist(),
         examples["context"].tolist(),
