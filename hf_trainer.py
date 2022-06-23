@@ -103,16 +103,11 @@ def compute_metrics(start_logits, end_logits, features, examples):
 def main(config):
 
     # read preprocessed data files
-    data_files = os.listdir(config.file_path)
-    data_file_list = []
-    for data_file in data_files:
-        data_file = pd.read_csv(os.path.join(config.file_path, data_file))
-        data_file_list.append(data_file)
+    train = pd.read_csv(os.path.join(config.file_path, 'preprocessed_train.csv'))
+    validation = pd.read_csv(os.path.join(config.file_path, 'preprocessed_validation.csv'))
 
-    train = data_file_list[0]
-    validation = data_file_list[1]
-    train_dataset = QADataset(train['input_ids'], train['token_type_ids'], train['attention_mask'], train['start_positions'], train['end_positions'])
-    validation_dataset = QADatasetValid(validation['input_ids'], validation['token_type_ids'], validation['attention_mask'], validation['offset_mapping'], validation['example_id'])
+    train_dataset = QADataset(train['input_ids'].tolist(), train['token_type_ids'].tolist(), train['attention_mask'].tolist(), train['start_positions'].tolist(), train['end_positions'].tolist())
+    validation_dataset = QADatasetValid(validation['input_ids'].tolist(), validation['token_type_ids'].tolist(), validation['attention_mask'].tolist(), validation['offset_mapping'].tolist(), validation['example_id'].tolist())
 
     total_batch_size = config.batch_size_per_device * torch.cuda.device_count() if torch.cuda.is_available() else 1
     n_total_iterations = int(len(train_dataset) / total_batch_size * config.n_epochs)
