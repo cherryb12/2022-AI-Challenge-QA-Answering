@@ -108,6 +108,7 @@ def main(config):
 
     train_dataset = QADataset(train['input_ids'].tolist(), train['token_type_ids'].tolist(), train['attention_mask'].tolist(), train['start_positions'].tolist(), train['end_positions'].tolist())
     validation_dataset = QADatasetValid(validation['input_ids'].tolist(), validation['token_type_ids'].tolist(), validation['attention_mask'].tolist(), validation['offset_mapping'].tolist(), validation['example_id'].tolist())
+    print(len(train_dataset), len(validation_dataset))
 
     total_batch_size = config.batch_size_per_device * torch.cuda.device_count() if torch.cuda.is_available() else 1
     n_total_iterations = int(len(train_dataset) / total_batch_size * config.n_epochs)
