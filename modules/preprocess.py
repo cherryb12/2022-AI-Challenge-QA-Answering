@@ -24,7 +24,6 @@ def define_argparser():
 
     p.add_argument(
         '--test_size',
-        required=True,
         default=.2,
         type=float,
         help="Set test size. Input float number")
@@ -131,21 +130,24 @@ def preprocess_validation_example(example):
 
 
 def main(config):
-    
     datapath = config.data_path
     savepath = config.save_path
 
-    # read data files
-    if os.path.isdir(datapath): 
-        file_list = os.listdir(datapath) 
+    # read data files into dataframe
+    file_list = os.listdir(datapath)
 
-    for i, file in enumerate(file_list):
+    for file in file_list:
         if file.endswith(".json"):
-            file = pd.read_json(os.path.join(datapath, file))
+            str = file.split('.')[0]
+            globals()[str] = pd.read_json(os.path.join(datapath, file))
         else:
-            file = pd.read_csv(os.path.join(datapath, file))
+            str = file.split('.')[0]
+            globals()[str] = pd.read_csv(os.path.join(datapath, file))
+    
+    train = train
+    test = test
 
-    # read train json file into dataframe
+    # train
     cols = ['context', 'question_id', 'question', 'answer_start', 'text']
 
     comp_list = []
@@ -171,7 +173,7 @@ def main(config):
 
     train = pd.DataFrame(comp_list, columns=cols) 
 
-    # read test json file into dataframe
+    # test
     cols = ['context', 'question_id', 'question']
 
     comp_list = []
