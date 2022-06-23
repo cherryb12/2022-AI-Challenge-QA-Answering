@@ -200,7 +200,7 @@ def main(config):
     print('Train shape', train.shape)
 
     # train and validation split
-    train, validation = train_test_split(train, config.test_size, random_state=42, shuffle=True)
+    train, validation = train_test_split(train, test_size=config.test_size, random_state=42, shuffle=True)
     train = train.reset_index()
     validation = validation.reset_index(drop=True)
     print('train length: {}, validation length: {}'.format(len(train), len(validation)))
