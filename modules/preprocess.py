@@ -134,18 +134,8 @@ def main(config):
     savepath = config.save_path
 
     # read data files into dataframe
-    file_list = os.listdir(datapath)
-
-    for file in file_list:
-        if file.endswith(".json"):
-            str = file.split('.')[0]
-            globals()[str] = pd.read_json(os.path.join(datapath, file))
-        else:
-            str = file.split('.')[0]
-            globals()[str] = pd.read_csv(os.path.join(datapath, file))
-    
-    train = train
-    test = test
+    train = pd.read_json(os.path.join(datapath, 'train.json'))
+    test = pd.read_json(os.path.join(datapath, 'test.json'))
 
     # train
     cols = ['context', 'question_id', 'question', 'answer_start', 'text']
