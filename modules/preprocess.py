@@ -46,9 +46,9 @@ def preprocess_training_examples(examples):
     inputs = tokenizer(
         examples["question"].tolist(),
         examples["context"].tolist(),
-        max_length= max_length,
+        max_length= config.max_length,
         truncation="only_second",
-        stride=stride,
+        stride=config.stride,
         return_overflowing_tokens=True,
         return_offsets_mapping=True,
         padding="max_length",
@@ -109,9 +109,9 @@ def preprocess_validation_examples(examples):
     inputs = tokenizer(
         examples["question"].tolist(),
         examples["context"].tolist(),
-        max_length=max_length,
+        max_length=config.max_length,
         truncation="only_second",
-        stride=stride,
+        stride=config.stride,
         return_overflowing_tokens=True,
         return_offsets_mapping=True,
         padding="max_length",
