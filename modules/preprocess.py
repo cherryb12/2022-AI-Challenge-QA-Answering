@@ -179,8 +179,16 @@ def main(config):
     test = pd.DataFrame(comp_list, columns=cols) 
 
     # answer_start correction
-    answer_start = []
+    text_comparision = []
+    for i in range(len(train['context'])):
+        if len(train['answer_start'][i]) !=0:
+            text_comparision.append([train['context'][i][train['answer_start'][i][0]: train['answer_start'][i][0]+len(train['text'][i][0])]])
+        else:
+            text_comparision.append(train['text'][i])
 
+    train['text_comparision'] = text_comparision
+
+    answer_start = []
     for i in range(len(train['answer_start'])):
         if train['text'][i]!= train['text_comparision'][i]:
             answer_start.append([train['answer_start'][i][0]+1])
@@ -188,6 +196,7 @@ def main(config):
             answer_start.append(train['answer_start'][i])
 
     train['answer_start'] = answer_start
+    train = train.drop(['text_comparision'], axis=1)
 
     # train and validation split
     train, validation = train_test_split(train, config.test_size, random_state=42, shuffle=True)
