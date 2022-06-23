@@ -209,18 +209,19 @@ def main(config):
     print('train length: {}, validation length: {}'.format(len(train), len(validation)))
 
     # preprocess data
-    train = preprocess_training_examples(train[0::])
-    preprocessed_train = pd.DataFrame({'input_ids': train['input_ids'], 'token_type_ids': train['token_type_ids'], 'attention_mask': train['attention_mask'], 'start_positions': train['start_positions'], 'end_positions': train['end_positions']})
-    
-    validation = preprocess_validation_examples(validation[0::])
-    preprocessed_validation = pd.DataFrame({'input_ids': validation['input_ids'], 'token_type_ids': validation['token_type_ids'], 'attention_mask': validation['attention_mask'], 'example_id': validation['example_id'], 'offset_mapping': validation['offset_mapping']})
-    
-    test = preprocess_validation_examples(test[0::])
-    preprocessed_test = pd.DataFrame({'input_ids': test['input_ids'], 'token_type_ids': test['token_type_ids'], 'attention_mask': test['attention_mask'], 'example_id': test['example_id'], 'offset_mapping': test['offset_mapping']})
-
+    inputs = preprocess_training_examples(train[0::])
+    preprocessed_train = pd.DataFrame({'input_ids': inputs['input_ids'], 'token_type_ids': inputs['token_type_ids'], 'attention_mask': inputs['attention_mask'], 'start_positions': inputs['start_positions'], 'end_positions': inputs['end_positions']})
+   
+    inputs = preprocess_validation_examples(validation[0::])
+    preprocessed_validation = pd.DataFrame({'input_ids': inputs['input_ids'], 'token_type_ids': inputs['token_type_ids'], 'attention_mask': inputs['attention_mask'], 'example_id': inputs['example_id'], 'offset_mapping': inputs['offset_mapping']})
+   
+    inputs = preprocess_validation_examples(test[0::])
+    preprocessed_test = pd.DataFrame({'input_ids': inputs['input_ids'], 'token_type_ids': inputs['token_type_ids'], 'attention_mask': inputs['attention_mask'], 'example_id': inputs['example_id'], 'offset_mapping': inputs['offset_mapping']})
+ 
     # save files
     preprocessed_train.to_csv(os.path.join(savepath, 'preprocessed_train.csv'), index=False)
     preprocessed_validation.to_csv(os.path.join(savepath, 'preprocessed_validation.csv'), index=False)
+    validation = validation.to_csv(os.path.join(savepath, 'validation.csv'), index=False)
     preprocessed_test.to_csv(os.path.join(savepath, 'preprocessed_test.csv'), index=False)
     print('finished preprocessing')
 
