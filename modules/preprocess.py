@@ -41,14 +41,13 @@ def define_argparser():
     return config
 
 # preprocess_training_example function
-def preprocess_training_example(example):
-    tokenizer = AutoTokenizer.from_pretrained(config.pretrained_model_name)
+def preprocess_training_examples(examples):
     inputs = tokenizer(
-        example["question"],
-        example["context"],
-        max_length=config.max_length,
+        examples["question"].tolist(),
+        examples["context"].tolist(),
+        max_length= max_length,
         truncation="only_second",
-        stride=config.stride,
+        stride=stride,
         return_overflowing_tokens=True,
         return_offsets_mapping=True,
         padding="max_length",
@@ -56,6 +55,8 @@ def preprocess_training_example(example):
 
     offset_mapping = inputs.pop("offset_mapping")
     sample_map = inputs.pop("overflow_to_sample_mapping")
+    answer_starts = examples['answer_start']
+    texts = examples['text']
     start_positions = []
     end_positions = []
 
@@ -63,10 +64,9 @@ def preprocess_training_example(example):
         input_ids = inputs["input_ids"][i]
         cls_index = input_ids.index(tokenizer.cls_token_id)
         sequence_ids = inputs.sequence_ids(i)
-
         sample_idx = sample_map[i]
-        answer_start = example['answer_start']
-        text = example['text']
+        answer_start = answer_starts[sample_idx]
+        text = texts[sample_idx]
 
         if len(answer_start) == 0:
             start_positions.append(cls_index)
@@ -102,16 +102,14 @@ def preprocess_training_example(example):
     inputs["end_positions"] = end_positions
     return inputs
 
-
 # preprocess_validation_example function
-def preprocess_validation_example(example):
-    tokenizer = AutoTokenizer.from_pretrained(config.pretrained_model_name)
+def preprocess_validation_examples(examples):
     inputs = tokenizer(
-        example["question"],
-        example["context"],
-        max_length=config.max_length,
+        examples["question"].tolist(),
+        examples["context"].tolist(),
+        max_length=max_length,
         truncation="only_second",
-        stride=config.stride,
+        stride=stride,
         return_overflowing_tokens=True,
         return_offsets_mapping=True,
         padding="max_length",
@@ -121,10 +119,12 @@ def preprocess_validation_example(example):
     example_ids = []
 
     for i in range(len(inputs["input_ids"])):
-        example_ids.append(example["question_id"])
+        sample_idx = sample_map[i]
+        example_ids.append(examples["question_id"][sample_idx])
+
         sequence_ids = inputs.sequence_ids(i)
         offset = inputs["offset_mapping"][i]
-        inputs["offset_mapping"][i] = [o if k==0 or sequence_ids[k] == 1 else None for k, o in enumerate(offset)]
+        inputs["offset_mapping"][i] = [o if k==0 or sequence_ids[k] == 1 else None for k, o in enumerate(offset)]  
 
     inputs["example_id"] = example_ids
     return inputs
@@ -206,74 +206,10 @@ def main(config):
     validation = validation.reset_index(drop=True)
     print('train length: {}, validation length: {}'.format(len(train), len(validation)))
 
-    # preprocess train data
-    inputs = []
-    for i in tqdm(range(len(train))):
-        inputs.append(preprocess_training_example(train.loc[i]))
-
-    input_ids = []
-    token_type_ids = []
-    attention_mask = []
-    start_positions = []
-    end_positions = []
-
-    for input in inputs:
-        for i in range(len(input['input_ids'])):
-            input_ids.append(input['input_ids'][i])
-            token_type_ids.append(input['token_type_ids'][i])
-            attention_mask.append(input['attention_mask'][i])
-            start_positions.append(input['start_positions'][i])
-            end_positions.append(input['end_positions'][i])
-
-    inputs = {'input_ids': input_ids, 'token_type_ids': token_type_ids, 'attention_mask': attention_mask, 'start_positions': start_positions, 'end_positions': end_positions}
-    train = pd.DataFrame(inputs)
-
-
-    # preprocess validation data
-    inputs = []
-
-    for i in tqdm(range(len(validation))):
-        inputs.append(preprocess_validation_example(validation.loc[i]))
-
-    input_ids = []
-    token_type_ids = []
-    attention_mask = []
-    offset_mapping = []
-    example_id = []
-
-    for input in inputs:
-        for i in range(len(input['input_ids'])):
-            input_ids.append(input['input_ids'][i])
-            token_type_ids.append(input['token_type_ids'][i])
-            attention_mask.append(input['attention_mask'][i])
-            offset_mapping.append(input['offset_mapping'][i])
-            example_id.append(input['example_id'][i])
-
-    inputs = {'input_ids': input_ids, 'token_type_ids': token_type_ids, 'attention_mask': attention_mask, 'offset_mapping': offset_mapping, 'example_id': example_id}
-    validation = pd.DataFrame(inputs)
-
-    # preprocess test data
-    inputs = []
-
-    for i in tqdm(range(len(test))):
-        inputs.append(preprocess_validation_example(test.loc[i]))
-
-    input_ids = []
-    token_type_ids = []
-    attention_mask = []
-    offset_mapping = []
-    example_id = []
-
-    for input in inputs:
-        for i in range(len(input['input_ids'])):
-            input_ids.append(input['input_ids'][i])
-            token_type_ids.append(input['token_type_ids'][i])
-            attention_mask.append(input['attention_mask'][i])
-            offset_mapping.append(input['offset_mapping'][i])
-            example_id.append(input['example_id'][i])
-
-    inputs = {'input_ids': input_ids, 'token_type_ids': token_type_ids, 'attention_mask': attention_mask, 'offset_mapping': offset_mapping, 'example_id': example_id}
-    test= pd.DataFrame(inputs)
+    # preprocess data
+    train = preprocess_training_examples(train[0::])
+    validation = preprocess_validation_examples(validation[0::])
+    test = preprocess_validation_examples(test[0::])
 
     # save files
     train.to_csv(os.path.join(savepath, 'preprocessed_train.csv'), index=False)
