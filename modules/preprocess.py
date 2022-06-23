@@ -140,7 +140,7 @@ def main(config):
     train = pd.read_json(os.path.join(datapath, 'train.json'))
     test = pd.read_json(os.path.join(datapath, 'test.json'))
 
-    # train
+    # train data
     cols = ['context', 'question_id', 'question', 'answer_start', 'text']
 
     comp_list = []
@@ -166,7 +166,7 @@ def main(config):
 
     train = pd.DataFrame(comp_list, columns=cols) 
 
-    # test
+    # test data
     cols = ['context', 'question_id', 'question']
 
     comp_list = []
@@ -223,6 +223,7 @@ def main(config):
     preprocessed_validation.to_csv(os.path.join(savepath, 'preprocessed_validation.csv'), index=False)
     validation = validation.to_csv(os.path.join(savepath, 'validation.csv'), index=False)
     preprocessed_test.to_csv(os.path.join(savepath, 'preprocessed_test.csv'), index=False)
+    test = test.to_csv(os.path.join(savepath, 'test.csv'), index=False)
     print('finished preprocessing')
 
 
