@@ -1,5 +1,6 @@
 import os
 import argparse
+from tqdm import tqdm
 
 import pandas as pd
 import numpy as np
@@ -207,7 +208,7 @@ def main(config):
 
     # preprocess train data
     inputs = []
-    for i in range(len(train)):
+    for i in tqdm(range(len(train))):
         inputs.append(preprocess_training_example(train.loc[i]))
 
     input_ids = []
@@ -231,7 +232,7 @@ def main(config):
     # preprocess validation data
     inputs = []
 
-    for i in range(len(validation)):
+    for i in tqdm(range(len(validation))):
         inputs.append(preprocess_validation_example(validation.loc[i]))
 
     input_ids = []
@@ -254,7 +255,7 @@ def main(config):
     # preprocess test data
     inputs = []
 
-    for i in range(len(test)):
+    for i in tqdm(range(len(test))):
         inputs.append(preprocess_validation_example(test.loc[i]))
 
     input_ids = []
@@ -278,6 +279,7 @@ def main(config):
     train.to_csv(os.path.join(savepath, 'preprocessed_train.csv'), index=False)
     validation.to_csv(os.path.join(savepath, 'preprocessed_validation.csv'), index=False)
     test.to_csv(os.path.join(savepath, 'preprocessed_test.csv'), index=False)
+    print('finished preprocessing')
 
 
 if __name__ == "__main__":
