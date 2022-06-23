@@ -34,7 +34,7 @@ def define_argparser():
                     help="Set pretrained model. (Examples: klue/bert-base, monologg/kobert, ...")
 
     p.add_argument('--batch_size_per_device', type=int, default=16)
-    p.add_argument('--n_epoch', type=int, default=2)
+    p.add_argument('--n_epochs', type=int, default=2)
     p.add_argument('--warmup_ratio', type=float, default=.1)
     p.add_argument('--max_answer_length', type=int, default=40)
 
