@@ -3,7 +3,7 @@ about competition
 
 about data
 
-requirements
+requirements - numpy, pandas, sklearn, transformers, datasets
 
 fine-tuning
 
