@@ -27,6 +27,7 @@ def define_argparser():
     p.add_argument('--file_path', required=True)
     p.add_argument('--pretrained_model_name', required=True)
     p.add_argument('--batch_size', type=int, default=16)
+    p.add_argument('--n_best', type=int, default=5)
     p.add_argument('--max_answer_length', type=int, default=40)
 
     config = p.parse_args()
@@ -79,7 +80,7 @@ def main(config):
         end_logits = end_logits[: len(test_dataset)]
     
     # create answers
-    n_best = 5
+    n_best = config.n_best
 
     example_to_features = collections.defaultdict(list)
     for idx, feature in enumerate(test_dataset):
