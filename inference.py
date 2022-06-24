@@ -1,5 +1,6 @@
 import os
 import argparse
+import pickle
 
 import pandas as pd
 import numpy as np
@@ -22,12 +23,8 @@ def define_argparser():
     p = argparse.ArgumentParser()
 
     p.add_argument('--model_fn', required=True)
-    p.add_argument('--pretrained_model_name', 
-                required=True,
-                default='monologg/kobigbird-bert-base',
-                help="Set pretrained model. (Examples: klue/bert-base, monologg/kobert, ...")
-
-    p.add_argument('--test_file', required=True)
+    p.add_argument('--file_path', required=True)
+    p.add_argument('--pretrained_model_name', required=True)
     p.add_argument('--batch_size', type=int, default=16)
     p.add_argument('--max_answer_length', type=int, default=40)
 
@@ -37,9 +34,12 @@ def define_argparser():
 
 
 def main(config):
-    test = pd.read_csv(config.test_file)
-    test_dataset = QADatasetValid(test['input_ids'], test['token_type_ids'], test['attention_mask'], test['offset_mapping'], test['example_id'])
-    test_set = QADatasetTest(test['input_ids'], test['token_type_ids'], test['attention_mask'])
+    with open(os.path.join(config.file_path, 'preprocessed_test.pickle'), 'rb') as fr:
+      preprocessed_test = pickle.load(fr)
+    test = pd.read_csv(os.path.join(config.file_path, 'test.csv'))
+
+    test_dataset = QADatasetValid(preprocessed_test['input_ids'], preprocessed_test['token_type_ids'], preprocessed_test['attention_mask'], preprocessed_test['offset_mapping'], preprocessed_test['example_id'])
+    test_set = QADatasetTest(preprocessed_test['input_ids'], preprocessed_test['token_type_ids'], preprocessed_test['attention_mask'])
 
     saved_data = torch.load(
         config.model_fn,
@@ -114,7 +114,6 @@ def main(config):
             predicted_answers.append({"id": example_id, "prediction_text": best_answer["text"]})
         else:
             predicted_answers.append({"id": example_id, "prediction_text": ""}) 
-        
 
 
 if __name__ == '__main__':
