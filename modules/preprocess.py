@@ -214,9 +214,14 @@ def main(config):
     preprocessed_test = preprocess_validation_examples(test[0::])
  
     # save files
-    preprocessed_train.to_pickle(os.path.join(savepath, 'preprocessed_train.pickle'))
-    preprocessed_validation.to_pickle(os.path.join(savepath, 'preprocessed_validation.pickle'))
-    preprocessed_test.to_pickle(os.path.join(savepath, 'preprocessed_test.pickle'))
+    with open(os.path.join(savepath, 'preprocessed_train.pickle'),'wb') as fw:
+        pickle.dump(preprocessed_train, fw)
+
+    with open(os.path.join(savepath, 'preprocessed_validation.pickle'),'wb') as fw:
+        pickle.dump(preprocessed_validation, fw)
+
+    with open(os.path.join(savepath, 'preprocessed_test.pickle'),'wb') as fw:
+        pickle.dump(preprocessed_test, fw)
 
     validation = validation.to_csv(os.path.join(savepath, 'validation.csv'), index=False)
     test = test.to_csv(os.path.join(savepath, 'test.csv'), index=False)
