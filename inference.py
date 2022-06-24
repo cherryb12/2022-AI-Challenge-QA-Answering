@@ -43,7 +43,7 @@ def main(config):
 
     saved_data = torch.load(
         config.model_fn,
-        map_location='cpu' if config.gpu_id < 0 else 'cuda:%d' % config.gpu_id
+        map_location='cuda' if torch.cuda.is_available() else 'cpu'
     )
 
     with torch.no_grad():
