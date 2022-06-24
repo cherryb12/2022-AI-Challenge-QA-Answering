@@ -209,20 +209,16 @@ def main(config):
     print('train length: {}, validation length: {}'.format(len(train), len(validation)))
 
     # preprocess data
-    inputs = preprocess_training_examples(train[0::])
-    preprocessed_train = pd.DataFrame({'input_ids': inputs['input_ids'], 'token_type_ids': inputs['token_type_ids'], 'attention_mask': inputs['attention_mask'], 'start_positions': inputs['start_positions'], 'end_positions': inputs['end_positions']})
-   
-    inputs = preprocess_validation_examples(validation[0::])
-    preprocessed_validation = pd.DataFrame({'input_ids': inputs['input_ids'], 'token_type_ids': inputs['token_type_ids'], 'attention_mask': inputs['attention_mask'], 'example_id': inputs['example_id'], 'offset_mapping': inputs['offset_mapping']})
-   
-    inputs = preprocess_validation_examples(test[0::])
-    preprocessed_test = pd.DataFrame({'input_ids': inputs['input_ids'], 'token_type_ids': inputs['token_type_ids'], 'attention_mask': inputs['attention_mask'], 'example_id': inputs['example_id'], 'offset_mapping': inputs['offset_mapping']})
+    preprocessed_train = preprocess_training_examples(train[0::])
+    preprocessed_validation = preprocess_validation_examples(validation[0::])
+    preprocessed_test = preprocess_validation_examples(test[0::])
  
     # save files
-    preprocessed_train.to_csv(os.path.join(savepath, 'preprocessed_train.csv'), index=False)
-    preprocessed_validation.to_csv(os.path.join(savepath, 'preprocessed_validation.csv'), index=False)
+    preprocessed_train.to_pickle(os.path.join(savepath, 'preprocessed_train.pickle'))
+    preprocessed_validation.to_pickle(os.path.join(savepath, 'preprocessed_validation.pickle'))
+    preprocessed_test.to_pickle(os.path.join(savepath, 'preprocessed_test.pickle'))
+
     validation = validation.to_csv(os.path.join(savepath, 'validation.csv'), index=False)
-    preprocessed_test.to_csv(os.path.join(savepath, 'preprocessed_test.csv'), index=False)
     test = test.to_csv(os.path.join(savepath, 'test.csv'), index=False)
     print('finished preprocessing')
 
