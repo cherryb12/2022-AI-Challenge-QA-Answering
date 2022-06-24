@@ -117,7 +117,7 @@ def main(config):
         else:
             predicted_answers.append({"id": example_id, "prediction_text": ""}) 
            
-    for i in range(predicted_answers):
+    for i in range(len(predicted_answers)):
         print(predicted_answers[i])
 
 
