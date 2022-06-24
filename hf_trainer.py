@@ -150,7 +150,7 @@ def main(config):
 
     predictions, _, _ = trainer.predict(validation_dataset)
     start_logits, end_logits = predictions
-    compute_metrics(start_logits, end_logits, validation_dataset, validation)
+    print(compute_metrics(start_logits, end_logits, validation_dataset, validation))
 
 
 if __name__ == "__main__":
