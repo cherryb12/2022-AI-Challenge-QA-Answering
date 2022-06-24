@@ -1,6 +1,7 @@
 import os
 import argparse
 import pickle
+from tqdm import tqdm
 
 import pandas as pd
 import numpy as np
@@ -64,7 +65,7 @@ def main(config):
         # Predictions
         start_logits = []
         end_logits = []
-        for batch in test_dataloader:
+        for batch in tqdm(test_dataloader):
             x = torch.tensor(batch['input_ids']).to(device)
             token_type_ids = torch.tensor(batch['token_type_ids']).to(device)
             attention_mask = torch.tensor(batch['attention_mask']).to(device)
