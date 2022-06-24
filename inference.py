@@ -45,7 +45,7 @@ def main(config):
 
     saved_data = torch.load(
         config.model_fn,
-        map_location='cuda' if torch.cuda.is_available() else 'cpu'
+        map_location='cuda:0' if torch.cuda.is_available() else 'cpu'
     )
 
     with torch.no_grad():
