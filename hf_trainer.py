@@ -37,6 +37,7 @@ def define_argparser():
     p.add_argument('--batch_size_per_device', type=int, default=16)
     p.add_argument('--n_epochs', type=int, default=2)
     p.add_argument('--warmup_ratio', type=float, default=.1)
+    p.add_argument('--n_best', type=int, default=5)
     p.add_argument('--max_answer_length', type=int, default=40)
 
     config = p.parse_args()
@@ -44,7 +45,7 @@ def define_argparser():
     return config
 
 def compute_metrics(start_logits, end_logits, features, examples):  
-    n_best = 5
+    n_best = config.n_best
     example_to_features = collections.defaultdict(list)
     for idx, feature in enumerate(features):
         example_to_features[feature["example_id"]].append(idx)
