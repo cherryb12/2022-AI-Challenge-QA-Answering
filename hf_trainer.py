@@ -1,5 +1,6 @@
 import os
 import argparse
+import pickle
 
 import pandas as pd
 import numpy as np
@@ -103,11 +104,14 @@ def compute_metrics(start_logits, end_logits, features, examples):
 def main(config):
 
     # read preprocessed data files
-    train = pd.read_csv(os.path.join(config.file_path, 'preprocessed_train.csv'))
-    validation = pd.read_csv(os.path.join(config.file_path, 'preprocessed_validation.csv'))
+    with open('preprocessed_train.pickle', 'rb') as fr:
+      train = pickle.load(fr)
+    with open('preprocessed_validation.pickle', 'rb') as fr:
+      valid = pickle.load(fr)
+    validation = pd.read_csv(os.path.join(config.file_path, 'validation.csv'))
 
-    train_dataset = QADataset(train['input_ids'].tolist(), train['token_type_ids'].tolist(), train['attention_mask'].tolist(), train['start_positions'].tolist(), train['end_positions'].tolist())
-    validation_dataset = QADatasetValid(validation['input_ids'].tolist(), validation['token_type_ids'].tolist(), validation['attention_mask'].tolist(), validation['offset_mapping'].tolist(), validation['example_id'].tolist())
+    train_dataset = QADataset(train['input_ids'], train['token_type_ids'], train['attention_mask'], train['start_positions'], train['end_positions'])
+    validation_dataset = QADatasetValid(valid['input_ids'], valid['token_type_ids'], valid['attention_mask'], valid['offset_mapping'], valid['example_id'])
     print(len(train_dataset), len(validation_dataset))
 
     total_batch_size = config.batch_size_per_device * torch.cuda.device_count() if torch.cuda.is_available() else 1
@@ -144,6 +148,10 @@ def main(config):
 
     torch.save(model.state_dict(), config.model_fn)
 
+    predictions, _, _ = trainer.predict(validation_dataset)
+    start_logits, end_logits = predictions
+    compute_metrics(start_logits, end_logits, validation_dataset, validation)
+    
 
 if __name__ == "__main__":
     config = define_argparser()
