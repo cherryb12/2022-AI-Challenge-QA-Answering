@@ -114,6 +114,8 @@ def main(config):
             predicted_answers.append({"id": example_id, "prediction_text": best_answer["text"]})
         else:
             predicted_answers.append({"id": example_id, "prediction_text": ""}) 
+           
+    print(predicted_answers)
 
 
 if __name__ == '__main__':
