@@ -108,7 +108,7 @@ def main(config):
       train = pickle.load(fr)
     with open(os.path.join(config.file_path, 'preprocessed_validation.pickle'), 'rb') as fr:
       valid = pickle.load(fr)
-    validation = pd.read_csv(os.path.join(config.file_path, 'validation.csv'))
+    validation = pd.read_pickle(os.path.join(config.file_path, 'validation.pkl'))
 
     train_dataset = QADataset(train['input_ids'], train['token_type_ids'], train['attention_mask'], train['start_positions'], train['end_positions'])
     validation_dataset = QADatasetValid(valid['input_ids'], valid['token_type_ids'], valid['attention_mask'], valid['offset_mapping'], valid['example_id'])

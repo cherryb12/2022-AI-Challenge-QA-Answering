@@ -36,7 +36,7 @@ def define_argparser():
 def main(config):
     with open(os.path.join(config.file_path, 'preprocessed_test.pickle'), 'rb') as fr:
       preprocessed_test = pickle.load(fr)
-    test = pd.read_csv(os.path.join(config.file_path, 'test.csv'))
+    test = pd.read_pickle(os.path.join(config.file_path, 'test.pkl'))
 
     test_dataset = QADatasetValid(preprocessed_test['input_ids'], preprocessed_test['token_type_ids'], preprocessed_test['attention_mask'], preprocessed_test['offset_mapping'], preprocessed_test['example_id'])
     test_set = QADatasetTest(preprocessed_test['input_ids'], preprocessed_test['token_type_ids'], preprocessed_test['attention_mask'])
