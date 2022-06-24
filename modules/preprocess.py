@@ -224,8 +224,8 @@ def main(config):
     with open(os.path.join(savepath, 'preprocessed_test.pickle'),'wb') as fw:
         pickle.dump(preprocessed_test, fw)
 
-    validation = validation.to_pickle(os.path.join(savepath, 'validation.pkl'), index=False)
-    test = test.to_pickle(os.path.join(savepath, 'test.pkl'), index=False)
+    validation = validation.to_pickle(os.path.join(savepath, 'validation.pkl'))
+    test = test.to_pickle(os.path.join(savepath, 'test.pkl'))
     print('finished preprocessing')
 
 
