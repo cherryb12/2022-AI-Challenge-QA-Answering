@@ -104,9 +104,9 @@ def compute_metrics(start_logits, end_logits, features, examples):
 def main(config):
 
     # read preprocessed data files
-    with open('preprocessed_train.pickle', 'rb') as fr:
+    with open(os.path.join(savepath, 'preprocessed_train.pickle'), 'rb') as fr:
       train = pickle.load(fr)
-    with open('preprocessed_validation.pickle', 'rb') as fr:
+    with open(os.path.join(savepath, 'preprocessed_validation.pickle'), 'rb') as fr:
       valid = pickle.load(fr)
     validation = pd.read_csv(os.path.join(config.file_path, 'validation.csv'))
 
@@ -151,7 +151,7 @@ def main(config):
     predictions, _, _ = trainer.predict(validation_dataset)
     start_logits, end_logits = predictions
     compute_metrics(start_logits, end_logits, validation_dataset, validation)
-    
+
 
 if __name__ == "__main__":
     config = define_argparser()
