@@ -15,7 +15,7 @@ HuggingFace🤗의 [Question Answering Tutorial](https://huggingface.co/docs/tra
 
 ## How to Use
 
-### Install python dependencies
+### Install python libraries
 
 ```bash
 pip install numpy==1.20.1
