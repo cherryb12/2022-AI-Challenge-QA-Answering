@@ -21,17 +21,37 @@ HuggingFace🤗의 [Question Answering Tutorial](https://huggingface.co/docs/tra
 pip install -r requirements.txt
 ```
 
-### Hyperparameter testing
-|Hyperparameters|-|
+### Preprocess
+train, test 테이터를 각각 전처리해 pickle 파일로 저장한다. 
+
+```bash
+python ./modules/preprocess.py --data_path --save_path --pretrained_model_name monologg/kobigbird-bert-base --max_length --stride
+```
+
+### Train
+전처리가 끝난 데이터를 불러와 학습시킨다. 
+
+```bash
+python ./hf_trainer.py --model_fn --file_path --pretrained_model_name monologg/kobigbird-bert-base --n_epochs 2  --batch_size --n_best --max_answer_length
+```
+
+### Inference
+학습 후 저장된 모델 가중치를 불러와 테스트 데이터를 예측한다. 
+
+```bash
+pip install -r requirements.txt
+```
+
+### Hyperparameter tuning
+|Hyperparameters||
 |-|-|
-|plm|klue/bert-base, klue/roberta-base, monologg/kobigbird-bert-base, monologg/koelectra-base-v3-discriminator|
+|plm|klue/bert, klue/roberta, kobigbird, koelectra|
+|max_length|200, 384, 512|
+|stride|50, 128|
 |n_epochs|2, 5|
 |batch_size|16, 32|
 |warmup_ratio|0.1|
-|max_length|200, 328, 512|
-|stride|50, 128|
 |n_best|1, 5, 20|
 |max_answer_length|40|
-
 
 머머머 해서 결과 제출 했을 때 08.-0.87 최종 6위로 끝남
