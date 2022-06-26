@@ -5,6 +5,7 @@
 텍스트와 질문이 주어졌을 때 본문에서 질문의 답을 찾는 문제이다. PLM(Pretrained Language Model)을 활용해 본문과 질문, 질문에 대한 정답을 학습시키 딥러닝으로 하여금 테스트 데이터에 대해 정답을 예측하도록 한다. 정확히는 본문에서 정답이 되는 텍스트의 시작 인덱스와 종료 인덱스를 예측한다.
 
 HuggingFace🤗의 [Question Answering Tutorial](https://huggingface.co/docs/transformers/tasks/question_answering)을 참고해 베이스라인을 작성했으며, 정답이 없는 경우를 학습시켜 테스트 데이터 결과를 제출한 결과 exact match 점수는 0.8 이상을 안정적으로 기록했다. 여기에 여러가지 한국어 PLM을 테스팅하고 최종 정답을 추출하는 샘플링 방법, 하이퍼 파라미터 테스팅을 진행하는 방식으로 접근했다. 
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1fuK8AtLaDI53IXWqRdoDoLMeAyf8FMQ1#scrollTo=cllrudrUQjse)
 
 기계독해 문제의 어려운 점:
 1. 주어진 본문에서 답을 찾아야 하는 문제로 질문이 애매하면 답을 잘 추론하지 못한다. 
