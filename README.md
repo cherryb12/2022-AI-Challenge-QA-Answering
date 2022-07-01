@@ -55,4 +55,4 @@ python ./inference.py --model_fn --file_path --pretrained_model_name --n_best --
 |max_answer_length|40|
 <br/>
 
-kobigbird 모델로 max_length 384, stride 50, n_epochs 2, batch_size 16, n_best 5로 테스트했을 때 validation data의 exact match 점수가 80.69였으며 해당 모델의 가중치로 테스트 데이터의 결과를 리더보드에 제출했을 때 최고 0.870까지 점수를 얻을 수 있었다. 하지만 트레인 데이터 split 시 random_state 값을 지정하지 않아 테스트 시마다 결과가 0.85-0.86로 달라지는 우를 범하고 말핬다... 대회 종료 후 조정된 점수를 보니 0.8634로 [최종 6위](https://aichallenge.or.kr/competition/detail/1/task/5/leaderboard)로 대회를 마감했다.
+kobigbird 모델로 max_length 384, stride 50, n_epochs 2, batch_size 16, n_best 5로 테스트했을 때 validation data의 exact match 점수가 80.69였으며 해당 모델의 가중치로 테스트 데이터의 결과를 리더보드에 제출했을 때 최고 0.870까지 점수를 얻을 수 있었다. 하지만 트레인 데이터 split 시 random_state 값을 지정하지 않아 테스트 시마다 결과가 0.85-0.86로 달라지는 우를 범했다:scream: ... 대회 종료 후 조정된 점수를 보니 0.8634로 [최종 6위](https://aichallenge.or.kr/competition/detail/1/task/5/leaderboard)로 대회를 마감했다.
